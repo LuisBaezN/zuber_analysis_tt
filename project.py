@@ -1,24 +1,30 @@
-import requests
-from bs4 import BeautifulSoup
+import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+import scipy.stats as st
 
-url = 'https://practicum-content.s3.us-west-1.amazonaws.com/data-analyst-eng/moved_chicago_weather_2017.html'
+try:
+    path = 'datasets/moved_project_sql_result_01.csv'
+    data_1 = pd.read_csv(path)
+    path = 'datasets/moved_project_sql_result_04.csv'
+    data_2 = pd.read_csv(path)
+except:
+    path = '../datasets/moved_project_sql_result_01.csv'
+    data_1 = pd.read_csv(path)
+    path = '../datasets/moved_project_sql_result_04.csv'
+    data_2 = pd.read_csv(path)
 
-req = requests.get(url)
+data_1.info()
+print(data_1.head(3))
 
-soup = BeautifulSoup(req.text)
+data_2.info()
+print(data_2.tail(3))
 
-raw_table = soup.find('table', attrs={"id": "weather_records"})
+print('> Duplicated data: ', data_1.duplicated().sum())
+print('> Duplicated data: ', data_2.duplicated().sum())
 
-col_names = []
+print(data_2.sort_values('average_trips', ascending=False).head(10))
 
-for row in raw_table.find_all('th'):
-    col_names.append(row.text)
-
-table = []
-
-for row in raw_table.find_all('tr'):
-    if not row.find_all('th'):
-        table.append([element.text for element in row.find_all('td')])
-
-weather_records = pd.DataFrame(table, columns=col_names)
+print(len(data_1['company_name'].unique()))
+data_1.plot(kind='bar', x='company_name')
+plt.show()
