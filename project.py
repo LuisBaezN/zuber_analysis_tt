@@ -16,15 +16,17 @@ except:
 
 data_1.info()
 print(data_1.head(3))
+print('> Duplicated data: ', data_1.duplicated().sum())
 
 data_2.info()
 print(data_2.tail(3))
-
-print('> Duplicated data: ', data_1.duplicated().sum())
 print('> Duplicated data: ', data_2.duplicated().sum())
 
-print(data_2.sort_values('average_trips', ascending=False).head(10))
+top_10 = data_2.sort_values('average_trips', ascending=False).head(10)
+print(top_10)
 
-print(len(data_1['company_name'].unique()))
-data_1.plot(kind='bar', x='company_name')
+data_1.plot(kind='bar', x='company_name', title='Trips rate per company', legend=False)
+plt.show()
+
+top_10.plot(kind='bar', x='dropoff_location_name', title='Average trip rate per neighborghood', legend=False)
 plt.show()
